@@ -4,7 +4,7 @@ include scripts/Freedom.mk
 # Include version identifiers to build up the full version string
 include Version.mk
 PACKAGE_HEADING := freedom-binutils-metal
-PACKAGE_VERSION := $(RISCV_BINUTILS_VERSION)-$(FREEDOM_BINUTILS_METAL_CODELINE)$(FREEDOM_BINUTILS_METAL_GENERATION)b$(FREEDOM_BINUTILS_METAL_BUILD)
+PACKAGE_VERSION := $(RISCV_BINUTILS_VERSION)-$(FREEDOM_BINUTILS_METAL_ID)
 
 # Source code directory references
 SRCNAME_BINUTILS := riscv-binutils
@@ -38,8 +38,11 @@ $(OBJ_WIN64)/build/$(PACKAGE_HEADING)/libs.stamp: \
 $(OBJDIR)/%/build/$(PACKAGE_HEADING)/source.stamp:
 	$(eval $@_TARGET := $(patsubst $(OBJDIR)/%/build/$(PACKAGE_HEADING)/source.stamp,%,$@))
 	$(eval $@_INSTALL := $(patsubst %/build/$(PACKAGE_HEADING)/source.stamp,%/install/$(PACKAGE_HEADING)-$(PACKAGE_VERSION)-$($@_TARGET),$@))
+	$(eval $@_REC := $(abspath $(patsubst %/build/$(PACKAGE_HEADING)/source.stamp,%/rec/$(PACKAGE_HEADING),$@)))
 	rm -rf $($@_INSTALL)
 	mkdir -p $($@_INSTALL)
+	rm -rf $($@_REC)
+	mkdir -p $($@_REC)
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 	cp -a $(SRCPATH_BINUTILS) $(dir $@)
@@ -49,12 +52,13 @@ $(OBJDIR)/%/build/$(PACKAGE_HEADING)/$(SRCNAME_BINUTILS)/build.stamp: \
 		$(OBJDIR)/%/build/$(PACKAGE_HEADING)/source.stamp
 	$(eval $@_TARGET := $(patsubst $(OBJDIR)/%/build/$(PACKAGE_HEADING)/$(SRCNAME_BINUTILS)/build.stamp,%,$@))
 	$(eval $@_INSTALL := $(patsubst %/build/$(PACKAGE_HEADING)/$(SRCNAME_BINUTILS)/build.stamp,%/install/$(PACKAGE_HEADING)-$(PACKAGE_VERSION)-$($@_TARGET),$@))
+	$(eval $@_REC := $(abspath $(patsubst %/build/$(PACKAGE_HEADING)/$(SRCNAME_BINUTILS)/build.stamp,%/rec/$(PACKAGE_HEADING),$@)))
 # CC_FOR_TARGET is required for the ld testsuite.
 	cd $(dir $@) && CC_FOR_TARGET=$(BARE_METAL_CC_FOR_TARGET) ./configure \
 		--target=$(BARE_METAL_TUPLE) \
 		$($($@_TARGET)-binutils-host) \
 		--prefix=$(abspath $($@_INSTALL)) \
-		--with-pkgversion="SiFive Binutils $(PACKAGE_VERSION)" \
+		--with-pkgversion="SiFive Binutils Metal $(PACKAGE_VERSION)" \
 		--with-bugurl="https://github.com/sifive/freedom-tools/issues" \
 		--disable-werror \
 		--disable-gdb \
@@ -66,7 +70,7 @@ $(OBJDIR)/%/build/$(PACKAGE_HEADING)/$(SRCNAME_BINUTILS)/build.stamp: \
 		--with-mpfr=no \
 		--with-gmp=no \
 		CFLAGS="-O2" \
-		CXXFLAGS="-O2" &>make-configure.log
-	$(MAKE) -C $(dir $@) &>$(dir $@)/make-build.log
-	$(MAKE) -C $(dir $@) -j1 install install-pdf install-html &>$(dir $@)/make-install.log
+		CXXFLAGS="-O2" &>$($@_REC)/$(SRCNAME_BINUTILS)-make-configure.log
+	$(MAKE) -C $(dir $@) &>$($@_REC)/$(SRCNAME_BINUTILS)-make-build.log
+	$(MAKE) -C $(dir $@) -j1 install install-pdf install-html &>$($@_REC)/$(SRCNAME_BINUTILS)-make-install.log
 	date > $@
