@@ -1,3 +1,4 @@
+# Reused binutils build script across binutils-metal, gcc-metal and trace-decoder
 $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp: \
 		$(OBJDIR)/%/build/$(PACKAGE_HEADING)/source.stamp
 	$(eval $@_TARGET := $(patsubst $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp,%,$@))
@@ -7,7 +8,7 @@ $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp: \
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 # CC_FOR_TARGET is required for the ld testsuite.
-	cd $(dir $@) && CC_FOR_TARGET=$(BARE_METAL_CC_FOR_TARGET) $(abspath $($@_BUILD))/$(SRCNAME_BINUTILS)/configure \
+	cd $(dir $@) && CC_FOR_TARGET=$(BARE_METAL_CC_FOR_TARGET) $(abspath $($@_BUILD))/$(BARE_METAL_BINUTILS)/configure \
 		--target=$(BARE_METAL_TUPLE) \
 		$($($@_TARGET)-binutils-host) \
 		--prefix=$(abspath $($@_INSTALL)) \

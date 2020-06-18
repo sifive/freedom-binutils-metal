@@ -12,6 +12,7 @@ SRCPATH_BINUTILS := $(SRCDIR)/$(SRCNAME_BINUTILS)
 BARE_METAL_TUPLE := riscv64-unknown-elf
 BARE_METAL_CC_FOR_TARGET ?= $(BARE_METAL_TUPLE)-gcc
 BARE_METAL_CXX_FOR_TARGET ?= $(BARE_METAL_TUPLE)-g++
+BARE_METAL_BINUTILS = riscv-binutils
 
 # Some special package configure flags for specific targets
 $(WIN64)-binutils-host          := --host=$(WIN64)
