@@ -3,7 +3,7 @@ include scripts/Freedom.mk
 
 # Include version identifiers to build up the full version string
 include Version.mk
-PACKAGE_HEADING := freedom-binutils-metal
+PACKAGE_HEADING := riscv64-unknown-elf-binutils
 PACKAGE_VERSION := $(RISCV_BINUTILS_VERSION)-$(FREEDOM_BINUTILS_METAL_ID)$(EXTRA_SUFFIX)
 
 # Source code directory references
@@ -62,8 +62,11 @@ include scripts/Support.mk
 
 $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/build.stamp: \
 		$(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp
+	$(eval $@_TARGET := $(patsubst $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/build.stamp,%,$@))
+	$(eval $@_INSTALL := $(patsubst %/build/$(PACKAGE_HEADING)/build-binutils/build.stamp,%/install/$(PACKAGE_HEADING)-$(PACKAGE_VERSION)-$($@_TARGET),$@))
 	$(eval $@_REC := $(abspath $(patsubst %/build/$(PACKAGE_HEADING)/build-binutils/build.stamp,%/rec/$(PACKAGE_HEADING),$@)))
 	$(MAKE) -C $(dir $@) -j1 install install-pdf install-html &>$($@_REC)/build-binutils-make-install.log
+	tclsh scripts/dyn-lib-check-$($@_TARGET).tcl $(abspath $($@_INSTALL))/bin/riscv64-unknown-elf-ld
 	date > $@
 
 $(OBJDIR)/$(NATIVE)/test/$(PACKAGE_HEADING)/test.stamp: \
