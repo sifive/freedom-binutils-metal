@@ -2,8 +2,8 @@
 RISCV_BINUTILS_VERSION := 2.35.0
 
 # Customization ID, which should identify the customization added to the original by SiFive
-FREEDOM_BINUTILS_METAL_ID := 2020.12.0-preview1
+FREEDOM_BINUTILS_METAL_ID := 2020.12.8
 
 # Characteristic tags, which should be usable for matching up providers and consumers
-FREEDOM_BINUTILS_METAL_RISCV_TAGS = rv32i rv64i m a f d c v zfh
+FREEDOM_BINUTILS_METAL_RISCV_TAGS = rv32i rv64i m a f d c v zfh zba zbb
 FREEDOM_BINUTILS_METAL_TOOLS_TAGS = binutils-metal

@@ -7,6 +7,11 @@ $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp: \
 	$(eval $@_BUILDLOG := $(abspath $(patsubst %/build/$(PACKAGE_HEADING)/build-binutils/support.stamp,%/buildlog/$(PACKAGE_HEADING),$@)))
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
+	# Workaround for CentOS random build fail issue
+	#
+	# Corresponding bugzilla entry on upstream:
+	# https://sourceware.org/bugzilla/show_bug.cgi?id=22941
+	touch $(abspath $($@_BUILD))/$(BARE_METAL_BINUTILS)/intl/plural.c
 # CC_FOR_TARGET is required for the ld testsuite.
 	cd $(dir $@) && CC_FOR_TARGET=$(BARE_METAL_CC_FOR_TARGET) $(abspath $($@_BUILD))/$(BARE_METAL_BINUTILS)/configure \
 		--target=$(BARE_METAL_TUPLE) \
