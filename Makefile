@@ -6,6 +6,7 @@ include Version.mk
 PACKAGE_WORDING := Bare Metal Binutils
 PACKAGE_HEADING := riscv64-unknown-elf-binutils
 PACKAGE_VERSION := $(RISCV_BINUTILS_VERSION)-$(FREEDOM_BINUTILS_METAL_ID)$(EXTRA_SUFFIX)
+PACKAGE_COMMENT := \# SiFive Freedom Package Properties File
 
 # Source code directory references
 SRCNAME_BINUTILS := riscv-binutils
@@ -35,7 +36,7 @@ $(OBJDIR)/%/build/$(PACKAGE_HEADING)/install.stamp: \
 	git log --format="[%ad] %s" > $(abspath $($@_INSTALL))/$(PACKAGE_HEADING)-$(PACKAGE_VERSION)-$($@_TARGET).changelog
 	cp README.md $(abspath $($@_INSTALL))/$(PACKAGE_HEADING)-$(PACKAGE_VERSION)-$($@_TARGET).readme.md
 	rm -f $(abspath $($@_PROPERTIES))
-	echo "# SiFive Freedom Package Properties File" > $(abspath $($@_PROPERTIES))
+	echo "$(PACKAGE_COMMENT)" > $(abspath $($@_PROPERTIES))
 	echo "PACKAGE_TYPE = freedom-tools" >> $(abspath $($@_PROPERTIES))
 	echo "PACKAGE_DESC_SEG = $(PACKAGE_WORDING)" >> $(abspath $($@_PROPERTIES))
 	echo "PACKAGE_FIXED_ID = $(PACKAGE_HEADING)" >> $(abspath $($@_PROPERTIES))
