@@ -4,7 +4,7 @@ $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp: \
 	$(eval $@_TARGET := $(patsubst $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp,%,$@))
 	$(eval $@_INSTALL := $(patsubst %/build/$(PACKAGE_HEADING)/build-binutils/support.stamp,%/install/$(PACKAGE_HEADING)-$(PACKAGE_VERSION)-$($@_TARGET),$@))
 	$(eval $@_BUILD := $(patsubst %/build/$(PACKAGE_HEADING)/build-binutils/support.stamp,%/build/$(PACKAGE_HEADING),$@))
-	$(eval $@_REC := $(abspath $(patsubst %/build/$(PACKAGE_HEADING)/build-binutils/support.stamp,%/rec/$(PACKAGE_HEADING),$@)))
+	$(eval $@_BUILDLOG := $(abspath $(patsubst %/build/$(PACKAGE_HEADING)/build-binutils/support.stamp,%/buildlog/$(PACKAGE_HEADING),$@)))
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 	# Workaround for CentOS random build fail issue
@@ -30,6 +30,6 @@ $(OBJDIR)/%/build/$(PACKAGE_HEADING)/build-binutils/support.stamp: \
 		--with-gmp=no \
 		$($($@_TARGET)-binutils-configure) \
 		CFLAGS="-O2" \
-		CXXFLAGS="-O2" &>$($@_REC)/build-binutils-make-configure.log
-	$(MAKE) -C $(dir $@) &>$($@_REC)/build-binutils-make-build.log
+		CXXFLAGS="-O2" &>$($@_BUILDLOG)/build-binutils-make-configure.log
+	$(MAKE) -C $(dir $@) &>$($@_BUILDLOG)/build-binutils-make-build.log
 	date > $@
